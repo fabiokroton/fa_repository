@@ -1,0 +1,45 @@
+{% extends "core/base.html" %}
+
+{% block title %}Materials{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Available Materials</h2>
+
+    {% if user.is_staff %}
+        <a href="{% url 'upload_material' %}" class="btn btn-success mb-3">
+            Upload New Material
+        </a>
+    {% endif %}
+
+    {% if materials %}
+        <ul class="list-group">
+            {% for material in materials %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ material.title }}</strong><br>
+                        <small class="text-muted">{{ material.description }}</small>
+                    </div>
+
+                    <div class="btn-group">
+                        <a href="{{ material.file.url }}" class="btn btn-primary btn-sm" download>
+                            Download
+                        </a>
+
+                        {% if user.is_staff %}
+                            <a href="{% url 'delete_material' material.id %}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Sei sicuro di voler eliminare questo materiale?');">
+                                Delete
+                            </a>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted">No materials uploaded yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
+

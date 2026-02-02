@@ -1,0 +1,85 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">Crea nuovo compito</h1>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow-sm border-0 rounded-4 hover-card">
+                <div class="card-body p-4">
+
+                    <!-- Icona -->
+                    <div class="icon-circle bg-warning bg-opacity-10 text-warning mb-3 mx-auto">
+                        📝
+                    </div>
+
+                    <h4 class="fw-semibold text-center mb-4">
+                        Inserisci i dettagli del compito
+                    </h4>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Titolo -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Titolo</label>
+                            {{ form.title }}
+                        </div>
+
+                        <!-- Descrizione -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Descrizione</label>
+                            {{ form.description }}
+                        </div>
+
+                        <!-- Scadenza -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Scadenza</label>
+                            {{ form.due_date }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 mt-3">
+                            Salva compito
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .icon-circle {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hover-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    /* Migliora i campi del form */
+    input, textarea {
+        border-radius: 10px !important;
+    }
+</style>
+{% endblock %}

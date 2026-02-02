@@ -1,0 +1,88 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">Student Dashboard</h1>
+    </div>
+
+    <!-- Grid of cards -->
+    <div class="row g-4">
+
+        <!-- Materials Card -->
+        <div class="col-md-6 col-lg-4">
+            <a href="{% url 'materials_home' %}" class="text-decoration-none">
+                <div class="card shadow-sm border-0 rounded-4 h-100 hover-card">
+                    <div class="card-body p-4">
+                        <div class="icon-circle bg-primary bg-opacity-10 text-primary mb-3">📁</div>
+                        <h4 class="fw-semibold mb-1">Materials</h4>
+                        <p class="text-muted mb-0">Browse and download class resources.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Assignments Card -->
+        <div class="col-md-6 col-lg-4">
+            <a href="{% url 'assignments:assignment_list' %}" class="text-decoration-none">
+                <div class="card shadow-sm border-0 rounded-4 h-100 hover-card">
+                    <div class="card-body p-4">
+                        <div class="icon-circle bg-warning bg-opacity-10 text-warning mb-3">📝</div>
+                        <h4 class="fw-semibold mb-1">Assignments</h4>
+                        <p class="text-muted mb-0">Check deadlines and submit your work.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm border-0 rounded-4 h-100 hover-card">
+                <div class="card-body p-4">
+                    <div class="icon-circle bg-success bg-opacity-10 text-success mb-3">👤</div>
+
+                    <h4 class="fw-semibold mb-1">
+                        {{ user.get_full_name|default:user.username }}
+                    </h4>
+
+                    <p class="text-muted mb-2">{{ user.email }}</p>
+
+                    <p class="small text-muted mb-1">
+                        Last login: {{ user.last_login|date:"d M Y, H:i" }}
+                    </p>
+
+                    <p class="small text-muted mb-0">
+                        Member since: {{ user.date_joined|date:"d M Y" }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Extra styling -->
+<style>
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hover-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+</style>
+{% endblock %}

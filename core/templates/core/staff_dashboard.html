@@ -1,0 +1,172 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">Staff Dashboard</h1>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Registrazione studenti -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm border-0 rounded-4 h-100 hover-card">
+                <div class="card-body p-4">
+                    <div class="icon-circle bg-info bg-opacity-10 text-info mb-3">🧑‍🎓</div>
+
+                    <h4 class="fw-semibold mb-2">Registrazione studenti</h4>
+
+                    <p class="mb-2">
+                        Stato:
+                        {% if site_settings.registration_open %}
+                            <strong class="text-success">Aperta</strong>
+                        {% else %}
+                            <strong class="text-danger">Chiusa</strong>
+                        {% endif %}
+                    </p>
+
+                    <a href="{% url 'toggle_registration' %}" class="btn btn-outline-primary btn-sm">
+                        Toggle registrazione
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ultimi materiali caricati -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm border-0 rounded-4 h-100 hover-card">
+                <div class="card-body p-4">
+                    <div class="icon-circle bg-primary bg-opacity-10 text-primary mb-3">📁</div>
+
+                    <h4 class="fw-semibold mb-2">Ultimi materiali caricati</h4>
+
+                    <ul class="list-unstyled small mb-3">
+                        {% for m in latest_materials %}
+                            <li class="mb-1">
+                                <strong>{{ m.title }}</strong><br>
+                                <span class="text-muted">{{ m.created_at }}</span>
+                            </li>
+                        {% empty %}
+                            <li class="text-muted">Nessun materiale presente.</li>
+                        {% endfor %}
+                    </ul>
+
+                    <a href="{% url 'upload_material' %}" class="btn btn-outline-primary btn-sm">
+                        Aggiungi materiale
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ultimi compiti assegnati -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm border-0 rounded-4 h-100 hover-card">
+                <div class="card-body p-4">
+                    <div class="icon-circle bg-warning bg-opacity-10 text-warning mb-3">📝</div>
+
+                    <h4 class="fw-semibold mb-2">Ultimi compiti assegnati</h4>
+
+                    <ul class="list-unstyled small mb-3">
+                        {% for a in latest_assignments %}
+                            <li class="mb-2">
+                                <strong>{{ a.title }}</strong><br>
+                                <span class="text-muted">Scadenza: {{ a.due_date }}</span><br>
+
+                                <a href="{% url 'assignments:assignment_submissions' a.id %}"
+                                   class="btn btn-sm btn-outline-success mt-1">
+                                    Vedi consegne
+                                </a>
+                            </li>
+                        {% empty %}
+                            <li class="text-muted">Nessun compito presente.</li>
+                        {% endfor %}
+                    </ul>
+
+                    <a href="/admin/assignments/assignment/add/" class="btn btn-outline-primary btn-sm">
+                        Crea nuovo compito (Admin)
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Crea nuovo compito -->
+        <div class="col-md-6 col-lg-4">
+            <a href="{% url 'assignments:create_assignment' %}" class="text-decoration-none">
+                <div class="card shadow-sm border-0 rounded-4 h-100 hover-card">
+                    <div class="card-body p-4">
+                        <div class="icon-circle bg-danger bg-opacity-10 text-danger mb-3">➕</div>
+                        <h4 class="fw-semibold mb-1">Crea nuovo compito</h4>
+                        <p class="text-muted mb-0">
+                            Aggiungi un compito e imposta la scadenza.
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Stato consegne -->
+        <div class="col-12">
+            <div class="card shadow-sm border-0 rounded-4 hover-card">
+                <div class="card-body p-4">
+                    <div class="icon-circle bg-success bg-opacity-10 text-success mb-3">📊</div>
+
+                    <h4 class="fw-semibold mb-3">Stato consegne (ultimi compiti)</h4>
+
+                    {% for item in assignment_status %}
+                        <div class="mb-4">
+                            <h5 class="fw-bold">{{ item.assignment.title }}</h5>
+
+                            <p class="mb-1"><strong>Hanno consegnato:</strong></p>
+                            <ul class="small">
+                                {% for s in item.submitted %}
+                                    <li>{{ s.username }}</li>
+                                {% empty %}
+                                    <li class="text-muted">Nessuno ha consegnato.</li>
+                                {% endfor %}
+                            </ul>
+
+                            <p class="mb-1"><strong>Non hanno consegnato:</strong></p>
+                            <ul class="small">
+                                {% for s in item.not_submitted %}
+                                    <li>{{ s.username }}</li>
+                                {% empty %}
+                                    <li class="text-muted">Tutti hanno consegnato.</li>
+                                {% endfor %}
+                            </ul>
+
+                            {% if not forloop.last %}
+                                <hr>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hover-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+</style>
+{% endblock %}

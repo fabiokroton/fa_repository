@@ -1,0 +1,91 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div style="display: flex; justify-content: space-between;">
+
+    <!-- COLONNA PRINCIPALE -->
+    <div style="flex: 1; padding-right: 20px;">
+        <h1 class="mb-4">Welcome to FA-Repository</h1>
+        <p class="lead">A learning platform for course materials and assignments.</p>
+
+        {% if not user.is_authenticated %}
+            <a href="{% url 'login' %}" class="btn btn-primary btn-lg mt-3">
+                Log in
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- COLONNA DI DESTRA (solo per staff) -->
+    <div style="width: 260px;">
+
+        {% if request.user.is_staff %}
+        <div style="
+            border: 2px solid #444;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+        ">
+            <h5 style="margin-top: 0; margin-bottom: 12px;">
+                Gestione registrazioni
+            </h5>
+
+            <form action="{% url 'toggle_registration' %}" method="post" style="margin: 0;">
+                {% csrf_token %}
+
+                <label style="display: flex; align-items: center; cursor: pointer;">
+
+                    <!-- Testo ON/OFF -->
+                    <span style="margin-right: 12px; font-weight: bold;">
+                        {% if site_settings.registration_open %}
+                            Aperte
+                        {% else %}
+                            Chiuse
+                        {% endif %}
+                    </span>
+
+                    <!-- Toggle switch -->
+                    <div style="position: relative;">
+                        <input type="checkbox"
+                               onchange="this.form.submit()"
+                               {% if site_settings.registration_open %}checked{% endif %}
+                               style="
+                                   width: 0;
+                                   height: 0;
+                                   opacity: 0;
+                               ">
+                        <span style="
+                            position: absolute;
+                            top: -10px;
+                            left: 0;
+                            width: 50px;
+                            height: 26px;
+                            background-color: {% if site_settings.registration_open %}#4caf50{% else %}#ccc{% endif %};
+                            border-radius: 26px;
+                            transition: 0.3s;
+                        "></span>
+                        <span style="
+                            position: absolute;
+                            top: -8px;
+                            left: {% if site_settings.registration_open %}26px{% else %}2px{% endif %};
+                            width: 22px;
+                            height: 22px;
+                            background-color: white;
+                            border-radius: 50%;
+                            transition: 0.3s;
+                            box-shadow: 0 0 3px rgba(0,0,0,0.4);
+                        "></span>
+                    </div>
+
+                </label>
+            </form>
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

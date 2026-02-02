@@ -1,0 +1,31 @@
+{% extends "core/base.html" %}
+
+{% block title %}Registrazioni chiuse{% endblock %}
+
+{% block content %}
+
+<div class="container" style="max-width: 600px; margin-top: 40px;">
+    <div style="
+        border: 2px solid #444;
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+        background-color: #fafafa;
+    ">
+        <h2 class="mb-4">Registrazioni attualmente chiuse</h2>
+
+        <p class="lead" style="margin-bottom: 20px;">
+            Il docente ha temporaneamente disattivato la possibilità di creare nuovi account.
+        </p>
+
+        <p style="color: #666;">
+            Riprova più tardi oppure contatta il docente se pensi ci sia un errore.
+        </p>
+
+        <a href="{% url 'home' %}" class="btn btn-secondary mt-4">
+            Torna alla home
+        </a>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="container py-4">
+
+    <h1 class="fw-bold mb-4">{{ assignment.title }} — Consegne</h1>
+
+    <!-- Studenti che hanno consegnato -->
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-body p-4">
+            <h4 class="fw-semibold mb-3">Hanno consegnato</h4>
+
+            {% if submissions %}
+                <ul class="list-group">
+                    {% for s in submissions %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                            <div>
+                                <strong>{{ s.student.username }}</strong><br>
+                                <small class="text-muted">
+                                    Consegna: {{ s.created_at|date:"d/m/Y H:i" }}
+                                </small>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                {% if s.file %}
+                                    <span class="badge bg-primary me-2">Online</span>
+                                    <a href="{{ s.file.url }}" class="btn btn-sm btn-outline-primary">
+                                        Scarica
+                                    </a>
+                                {% else %}
+                                    <span class="badge bg-success">A mano</span>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">Nessuno ha ancora consegnato.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Studenti che NON hanno consegnato -->
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4">
+            <h4 class="fw-semibold mb-3">Non hanno consegnato</h4>
+
+            {% if not_submitted %}
+                <ul class="list-group">
+                    {% for student in not_submitted %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>{{ student.username }}</strong>
+
+                            <a href="{% url 'assignments:deliver_in_person' assignment.id student.id %}"
+                               class="btn btn-sm btn-outline-success">
+                                Segna consegnato a mano
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">Tutti hanno consegnato.</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

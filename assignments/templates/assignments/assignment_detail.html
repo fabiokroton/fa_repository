@@ -1,0 +1,62 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1 class="mb-3">{{ assignment.title }}</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Descrizione</h5>
+            <p class="card-text">{{ assignment.description }}</p>
+
+            <p class="text-muted">
+                <strong>Scadenza:</strong> {{ assignment.due_date }}
+            </p>
+        </div>
+    </div>
+
+    {% if submission %}
+        <!-- Se lo studente ha già consegnato -->
+        <div class="alert alert-success">
+            <strong>Hai già consegnato questo compito.</strong>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <p><strong>Protocollo:</strong> {{ submission.protocol_number }}</p>
+                <p><strong>Data invio:</strong> {{ submission.submitted_at }}</p>
+
+                {% if submission.file %}
+                    <a href="{{ submission.file.url }}" class="btn btn-primary">
+                        Scarica la tua consegna
+                    </a>
+                {% else %}
+                    <span class="badge bg-success">Consegnato a mano</span>
+                {% endif %}
+            </div>
+        </div>
+
+    {% else %}
+        <!-- Form di consegna -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Invia la tua consegna</h5>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <button type="submit" class="btn btn-success">
+                        Invia consegna
+                    </button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
+
